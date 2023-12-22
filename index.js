@@ -102,7 +102,7 @@ async function run() {
         $set: {
           title: taskItem.title,
           description: taskItem.description,
-          deadline: taskItem.deadline,
+          deadlines: taskItem.deadlines,
           priority: taskItem.priority,
         },
       };
