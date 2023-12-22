@@ -36,17 +36,23 @@ async function run() {
 
     app.get("/task/:id", async (req, res) => {
       const id = req.params.id;
-      const query = {_id: new ObjectId(id)};
+      const query = { _id: new ObjectId(id) };
       const result = await taskCollection.findOne(query);
-      res.send(result)
-    })
+      res.send(result);
+    });
     // post task data
     app.get("/task/complete/:id", async (req, res) => {
       const id = req.params.id;
-      const query = {_id: new ObjectId(id)};
+      const query = { _id: new ObjectId(id) };
       const result = await taskCollection.findOne(query);
-      res.send(result)
-    })
+      res.send(result);
+    });
+    app.get("/task/allTask/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await taskCollection.findOne(query);
+      res.send(result);
+    });
     // post task data
     app.post("/task", async (req, res) => {
       const tasks = req.body;
@@ -54,13 +60,13 @@ async function run() {
       res.send(result);
     });
 
-    app.patch("/task/:id", async (req,res) => {
+    app.patch("/task/:id", async (req, res) => {
       const id = req.params.id;
-      const filter = {_id: new ObjectId(id)};
+      const filter = { _id: new ObjectId(id) };
 
       const changedStatusOnGoing = {
         $set: {
-          status: "ongoing"
+          status: "ongoing",
         },
       };
 
@@ -68,16 +74,16 @@ async function run() {
         filter,
         changedStatusOnGoing
       );
-      res.send(result)
-    })
+      res.send(result);
+    });
 
     app.patch("/task/complete/:id", async (req, res) => {
       const id = req.params.id;
-      const filter = {_id: new ObjectId(id)};
+      const filter = { _id: new ObjectId(id) };
 
       const changedStatusComplete = {
         $set: {
-          status: "completed"
+          status: "completed",
         },
       };
 
@@ -85,8 +91,34 @@ async function run() {
         filter,
         changedStatusComplete
       );
-      res.send(result)
-    })
+      res.send(result);
+    });
+
+    app.patch("/task/allTask/:id", async (req, res) => {
+      const taskItem = req.body;
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updateTask = {
+        $set: {
+          title: taskItem.title,
+          description: taskItem.description,
+          deadline: taskItem.deadline,
+          priority: taskItem.priority,
+        },
+      };
+
+      const result = await taskCollection.updateOne(filter, updateTask);
+      res.send(result);
+    });
+
+    app.delete("/task/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await taskCollection.deleteOne(query);
+      res.send(result);
+    });
+
+
 
 
     // Send a ping to confirm a successful connection
